@@ -21,15 +21,16 @@ function BotsPage() {
     setIsSpecs(true);
   }
 
-  function removeBot(removedBot) {
-    setMyBots(myBots.filter(bot => bot.id !== removedBot.id));
+  function unenlistBot(unenlistedBot) {
+    setAllBots([unenlistedBot, ...allBots]);
+    setMyBots(myBots.filter(bot => bot.id !== unenlistedBot.id));
   }
 
   function deleteBot(deletedBot) {
     fetch(`http://localhost:8002/bots/${deletedBot.id}`,
     {method: 'DELETE'})
     .then(() => {
-      removeBot(deletedBot);
+      setMyBots(myBots.filter(bot => bot.id !== deletedBot.id));
       setAllBots(allBots.filter(bot => bot.id !== deletedBot.id));
     })
   }
@@ -48,7 +49,7 @@ function BotsPage() {
 
   return (
     <div>
-      <YourBotArmy bots={myBots} onBotCardClick={removeBot} onDeleteClick={deleteBot} />
+      <YourBotArmy bots={myBots} onBotCardClick={unenlistBot} onDeleteClick={deleteBot} />
       {
         isSpecs ? 
         <BotSpecs bot={checkedBot} onBackClick={goBack} onEnlistClicked={enlistBot} /> :
